@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUNGKAD48 - SITUS SEDOT SALDO & RUNGKAD ABADI</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background-color: #05000a;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .app-fullscreen {
+            background: radial-gradient(circle, #2a0845 0%, #0b001a 100%);
+            width: 100vw;
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            border: 4px solid #ffd700;
+        }
+
+        .ticker-wrap {
+            background: #ff0055;
+            color: #fff;
+            padding: 6px 0;
+            font-size: 13px;
+            letter-spacing: 1px;
+            overflow: hidden;
+            white-space: nowrap;
+            border-bottom: 2px solid #ffd700;
+            margin: -15px -15px 15px -15px;
+            text-shadow: 1px 1px #000;
+        }
+        .ticker-move {
+            display: inline-block;
+            animation: ticker 18s linear infinite;
+        }
+        @keyframes ticker {
+            0% { transform: translate3d(100%, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 3px dashed #ffd700;
+            padding-bottom: 10px;
+        }
+        .title-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .title {
+            margin: 0;
+            background: linear-gradient(180deg, #fff700, #ff8800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 24px;
+            font-weight: 900;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            letter-spacing: 1px;
+        }
+        .subtitle {
+            font-size: 11px;
+            color: #ff00aa;
+            font-weight: normal;
+            font-family: sans-serif;
+            text-shadow: none;
+        }
+        .account-badge {
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: #ff0000;
+            color: #ffffff;
+            font-weight: bold;
+            animation: pulse 0.8s infinite alternate;
+            box-shadow: 0 0 8px #ff0000;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
+        }
+
+        .header-btns {
+            display: flex;
+            gap: 6px;
+        }
+        .btn-header {
+            background: linear-gradient(180deg, #ffcc00, #ff8800);
+            border: 2px solid #ffffff;
+            color: #000;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px #ffcc00;
+        }
+        .btn-header-topup {
+            background: linear-gradient(180deg, #ff5500, #990000);
+            color: #fff;
+            box-shadow: 0 0 10px #ff5500;
+            display: none;
+        }
+
+        .toast-notif {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff0055;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: 2px solid #ffd700;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 0 20px #ff0055;
+            z-index: 1000;
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .toast-notif.show {
+            top: 20px;
+        }
+
+        .jackpot-flash {
+            animation: flashBg 0.2s infinite alternate;
+        }
+        @keyframes flashBg {
+            0% { background-color: #ff0000; }
+            100% { background-color: #ffd700; }
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 15px;
+            flex: 1;
+            align-items: start;
+        }
+        @media (max-width: 850px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section-box {
+            background: rgba(15, 0, 30, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #ff00aa;
+            box-shadow: 0 0 15px rgba(255, 0, 170, 0.4);
+        }
+
+        .reels-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0 15px 0;
+            position: relative;
+            background: #000;
+            padding: 15px;
+            border-radius: 10px;
+            border: 3px solid #ffd700;
+            box-shadow: inset 0 0 20px #ff00aa;
+        }
+        .reel-box {
+            width: 105px;
+            height: 105px;
+            background: linear-gradient(180deg, #110022, #330066);
+            border: 3px solid #00ffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            user-select: none;
+            box-shadow: 0 0 10px #00ffff;
+            transition: transform 0.1s ease;
+        }
+        @media (max-width: 480px) {
+            .reel-box {
+                width: 75px;
+                height: 75px;
+                font-size: 35px;
+            }
+        }
+        .blur-effect {
+            filter: blur(5px);
+            opacity: 0.6;
+            transform: scale(0.95);
+        }
+
+        .win-banner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(180deg, #ff0000, #ffbb00);
+            color: #ffffff;
+            padding: 15px 30px;
+            font-weight: 900;
+            font-size: 26px;
+            border-radius: 8px;
+            border: 4px solid #ffffff;
+            box-shadow: 0 0 40px #ff0000, 0 0 80px #ffbb00;
+            pointer-events: none;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+            text-shadow: 2px 2px #000;
+        }
+        .win-banner.show {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .controls-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bet-control {
+            background: #110022;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ffd700;
+        }
+        .bet-control label {
+            font-size: 12px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        .bet-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .bet-control input {
+            width: 100px;
+            padding: 6px;
+            background: #000;
+            border: 2px solid #00ff66;
+            color: #00ff66;
+            border-radius: 4px;
+            text-align: right;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .btn-preset {
+            background: #ff00aa;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px #000;
+        }
+        .btn-spin {
+            background: linear-gradient(180deg, #00ff66, #008822);
+            color: #ffffff;
+            box-shadow: 0 0 15px #00ff66;
+        }
+        .secondary-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .btn-buy {
+            background: linear-gradient(180deg, #ff0000, #880000);
+            color: #ffffff;
+            box-shadow: 0 0 10px #ff0000;
+        }
+        .btn-auto {
+            background: linear-gradient(180deg, #ffbb00, #997700);
+            color: #000;
+            box-shadow: 0 0 10px #ffbb00;
+        }
+        .btn-action:disabled {
+            background: #333 !important;
+            color: #777 !important;
+            box-shadow: none !important;
+            border-color: #555 !important;
+            cursor: not-allowed;
+        }
+
+        .section-title {
+            margin: 0 0 10px 0;
+            color: #00ffff;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px #00ffff;
+        }
+        .stats-grid-compact {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .stat-card-compact {
+            background: #000;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #ff00aa;
+        }
+        .stat-label-compact {
+            font-size: 10px;
+            color: #aaa;
+        }
+        .stat-val-compact {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+        .text-red { color: #ff0055; }
+        .text-green { color: #00ff66; }
+
+        .chart-container-compact {
+            background: #000;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ffd700;
+        }
+        .chart-title-compact {
+            font-size: 10px;
+            color: #ffd700;
+            margin-bottom: 4px;
+        }
+        canvas {
+            width: 100%;
+            height: 65px;
+            display: block;
+            background: #05000a;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 999;
+            padding: 15px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-body {
+            background: #110022;
+            padding: 20px;
+            border-radius: 8px;
+            border: 3px solid #ffd700;
+            max-width: 440px;
+            width: 100%;
+            text-align: left;
+            margin: auto;
+            box-shadow: 0 0 30px #ff00aa;
+        }
+        .modal-title {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            color: #ffd700;
+            text-transform: uppercase;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            color: #00ffff;
+            margin-bottom: 4px;
+        }
+        .form-group input[type="range"], .form-group select, .form-group input[type="number"], .form-group input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            background: #000;
+            color: #fff;
+            border: 1px solid #ff00aa;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-top: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            color: #fff;
+        }
+        .checkbox-group input {
+            margin-top: 2px;
+        }
+        .btn-close {
+            background: #ff0055;
+            color: #ffffff;
+            border: 1px solid #fff;
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 12px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .sell-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .sell-card {
+            background: #000;
+            border: 1px solid #ffd700;
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sell-info {
+            font-size: 11px;
+        }
+        .sell-name {
+            color: #fff;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .sell-price {
+            color: #00ff66;
+            font-weight: bold;
+        }
+        .sell-real-price {
+            color: #ff0055;
+            text-decoration: line-through;
+            font-size: 10px;
+        }
+        .btn-sell {
+            background: #ff00aa;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .btn-sell:disabled {
+            background: #333;
+            border-color: #555;
+            color: #777;
+            cursor: not-allowed;
+        }
+
+        .alert-box-ruin {
+            background: #330011;
+            border: 2px solid #ff0055;
+            padding: 12px;
+            border-radius: 6px;
+            color: #ffb3b3;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .confirm-sell-box {
+            background: #000;
+            border: 1px dashed #ff0055;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 12px 0;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        .confirm-sell-item-title {
+            color: #ffd700;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-fullscreen" id="appCard">
+    <div class="ticker-wrap">
+        <div class="ticker-move">
+            🔥 MAXWIN SORE INI: User**92 Baru Saja WD Rp 48.500.000! ⚡ User**12 Dapet Petir Merah x500 Rp 12.000.000! ⚡ SERVER THAILAND AUTO GACOR! 🔥
+        </div>
+    </div>
+
+    <div class="toast-notif" id="toastNotif">⚡ SALDO MASUK!</div>
+
+    <div class="header">
+        <div class="title-group">
+            <h1 class="title">⚡ RUNGKAD48</h1>
+            <span class="subtitle">(Situs Sedot Saldo)</span>
+            <span class="account-badge" id="accountStatusBadge">AKUN REGULER</span>
+        </div>
+        <div class="header-btns">
+            <button class="btn-header btn-header-topup" id="btnOpenTopup">🏷️ JUAL BARANG</button>
+            <button class="btn-header" id="btnOpenModal">⚙️ SETTING BANDAR</button>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="section-box">
+            <div class="reels-container">
+                <div class="win-banner" id="winBanner">⚡ MAXWIN X500! ⚡</div>
+                <div class="reel-box" id="r1">⚡</div>
+                <div class="reel-box" id="r2">👑</div>
+                <div class="reel-box" id="r3">💎</div>
+            </div>
+
+            <div class="controls-group">
+                <button class="btn-action btn-spin" id="btnSpin">⚡ SPIN MANUAL GACOR ⚡</button>
+
+                <div class="bet-control">
+                    <label for="betInput">BET TARUHAN:</label>
+                    <div class="bet-input-wrap">
+                        <button class="btn-preset" onclick="addBet(500)">+500</button>
+                        <button class="btn-preset" onclick="addBet(2000)">+2k</button>
+                        <div>Rp <input type="number" id="betInput" value="1000" min="100" step="500"></div>
+                    </div>
+                </div>
+
+                <div class="secondary-actions">
+                    <button class="btn-action btn-buy" id="btnBuySpin">🔥 BUY FREESPIN (100X)</button>
+                    <button class="btn-action btn-auto" id="btnAuto">⚡ AUTO TURBO (100X)</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h3 class="section-title">📊 DOMPET & STATISTIK REALTIME</h3>
+            
+            <div class="stats-grid-compact">
+                <div class="stat-card-compact">
+                    <div class="stat-label-compact">SALDO UTAMA</div>
+                    <div class="stat-val-compact text-green" id="valBalance">Rp 100.000</div>
+                </div>
+                <div class="stat-card-compact">
+                    <div class="stat-label-compact">PROFIT BANDAR</div>
+                    <div class="stat-val-compact text-red" id="valProfit">Rp 0</div>
+                </div>
+                <div class="stat-card-compact">
+                    <div class="stat-label-compact">TOTAL TURNOVER</div>
+                    <div class="stat-val-compact" id="valTotalBet">Rp 0</div>
+                </div>
+                <div class="stat-card-compact">
+                    <div class="stat-label-compact">RTP LIVE AKUN</div>
+                    <div class="stat-val-compact" id="valActualRtp">0%</div>
+                </div>
+            </div>
+
+            <div class="chart-container-compact">
+                <div class="chart-title-compact">GRAFIK KURVA RUNGKAD / GACOR:</div>
+                <canvas id="balanceChart" width="400" height="65"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Setting Bandar -->
+    <div class="modal" id="modalSettings">
+        <div class="modal-body">
+            <h3 class="modal-title">⚙️ SETTING RAHASIA BANDAR</h3>
+            
+            <div class="form-group">
+                <label>SETTING STATUS ID PLAYER:</label>
+                <select id="accountTypeSelect">
+                    <option value="new">AKUN BARU / VIP (RTP 90% - PAKAN MANCING)</option>
+                    <option value="regular" selected>AKUN REGULER (IKUT SYSTEM SETTING)</option>
+                    <option value="rungkad">AKUN SEDOT / RUNGKAD PARAH (RTP 10%)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>TARGET SYSTEM RTP GLOBAL: <b id="rtpText">70%</b></label>
+                <input type="range" id="rtpInput" min="10" max="98" value="70">
+            </div>
+
+            <label class="checkbox-group">
+                <input type="checkbox" id="nearMissInput" checked>
+                <span><b>SETTING NEAR-MISS:</b> Sering munculkan 2 pecah scatter/petir biar nagih.</span>
+            </label>
+
+            <label class="checkbox-group">
+                <input type="checkbox" id="fakeJackpotInput" checked>
+                <span><b>EFEK JACKPOT PALSU:</b> Menang remah-remah tetep dibuat heboh maxwin.</span>
+            </label>
+
+            <button class="btn-close" id="btnCloseModal">SIMPAN & KUNCI SETTING</button>
+        </div>
+    </div>
+
+    <!-- Modal 1: Gadaikan / Jual Barang Aset Pribadi -->
+    <div class="modal" id="modalTopup">
+        <div class="modal-body">
+            <h3 class="modal-title" style="color:#ff0055;">🏷️ JUAL BARANG PRIBADI (JUAL MURAH)</h3>
+            <p style="font-size: 11px; color: #aaa; margin-top: -6px;">Uang habis? Korbankan aset berhargamu dengan harga obral demi modal spin:</p>
+            
+            <div class="sell-grid" id="sellItemsContainer"></div>
+
+            <button class="btn-close" id="btnCloseTopup">BATAL (SIMPAN BARANG SAYA)</button>
+        </div>
+    </div>
+
+    <!-- Modal Confirmation: Konfirmasi Jual Barang -->
+    <div class="modal" id="modalConfirmSell">
+        <div class="modal-body" style="border-color: #ff00aa;">
+            <h3 class="modal-title" style="color:#ff00aa;">⚠️ YAKIN MAU JUAL ASET PRIBADI?</h3>
+            
+            <div class="confirm-sell-box">
+                <div class="confirm-sell-item-title" id="confirmItemTitle">📺 Smart TV 43 Inch</div>
+                <div>Estimasi Harga Asli: <span style="text-decoration: line-through; color: #ff0055;" id="confirmItemRealPrice">Rp 3.500.000</span></div>
+                <div>Harga Obral Bandar: <span style="color: #00ff66; font-weight: bold;" id="confirmItemSellPrice">Rp 200.000</span></div>
+                <div style="margin-top: 8px; color: #ff99bb; font-size: 11px;">
+                    ⚠️ <b>KERUGIAN BESAR:</b> Barang bernilai tinggi kamu dihargai murah dan uangnya berisiko langsung hangus di mesin slot!
+                </div>
+            </div>
+
+            <button class="btn-action btn-spin" id="btnExecuteSell" style="background: linear-gradient(180deg, #ff00aa, #880055); color:#fff; margin-bottom: 8px;">💸 YAKIN JUAL MURAH & TAROH KESALDO</button>
+            <button class="btn-close" onclick="cancelSellItem()" style="background:#222; color:#fff;">🛡️ BATAL (TETAP SIMPAN BARANG)</button>
+        </div>
+    </div>
+
+    <!-- Modal 2: Popup Bangkrut Pertama -->
+    <div class="modal" id="modalFirstRuin">
+        <div class="modal-body" style="border-color: #ff0055;">
+            <h3 class="modal-title" style="color:#ff0055;">💀 SALDO UTAMA HABIS TOTAL!</h3>
+            
+            <div class="alert-box-ruin">
+                <b>INILAH REALITA JUDI ONLINE!</b><br>
+                Uang Rp 100.000 kamu hangus terhisap algoritma sistem bandar. Tidak ada yang namanya "sistem gacor", semua angka dan kekalahan kamu sudah diatur secara matematis agar bandar selalu untung!
+            </div>
+
+            <p style="font-size: 11px; color: #fff;">Apakah kamu mau sadar sekarang, atau nekat menjual barang pribadi demi memuaskan rasa penasaranmu?</p>
+
+            <button class="btn-action btn-spin" onclick="closeRuinModalAndOpenSell()" style="background: linear-gradient(180deg, #ff0055, #880000); color:#fff; margin-bottom: 8px;">🏷️ NEKAT LANJUT (JUAL BARANG PRIBADI)</button>
+            <button class="btn-close" onclick="quitGameAlert()" style="background:#222; color:#fff;">🛡️ SADAR & BERHENTI MAIN SEKARANG</button>
+        </div>
+    </div>
+
+    <!-- Modal Custom 3: Notifikasi Berhasil Sadar & Berhenti -->
+    <div class="modal" id="modalQuitSuccess">
+        <div class="modal-body" style="border-color: #00ff66; background: #001a0d;">
+            <h3 class="modal-title" style="color:#00ff66; text-align:center;">🛡️ KEPUTUSAN CERDAS & BIJAK!</h3>
+            
+            <div class="alert-box-ruin" style="background:#00331a; border-color:#00ff66; color:#b3ffcc; text-align:center;">
+                <b>KAMU BERHASIL MENYELAMATKAN MASA DEPANMU!</b><br><br>
+                Pilihan sangat bijak! Kamu berhasil menyelamatkan sisa aset, barang berharga, dan masa depanmu dari kehancuran lingkaran setan judi online.
+            </div>
+
+            <button class="btn-close" onclick="closeQuitSuccessModal()" style="background: linear-gradient(180deg, #00ff66, #008822); color:#000; font-weight:900;">TUTUP & TOBAT SEKARANG</button>
+        </div>
+    </div>
+
+    <!-- Modal 4: Popup Kebangkrutan Akhir -->
+    <div class="modal" id="modalTotalRuin">
+        <div class="modal-body" style="border-color: #ff0000; background: #200000;">
+            <h3 class="modal-title" style="color:#ff0000; font-size: 20px; text-align:center;">🚫 TOLOL! KAMU BENAR-BENAR GEMBEL!</h3>
+            
+            <div class="alert-box-ruin" style="background:#400000; border-color:#ff0000; text-align:center; font-size: 13px;">
+                <b>SELAMAT! KAMU BIKIN BANDAR KAYA RAYA!</b><br><br>
+                HP, Motor, Sepeda, TV, sampai Sertifikat Rumah kamu udah HABIS TERJUAL dengan harga sampah, dan semuanya HANGUS tak tersisa di mesin ini!<br><br>
+                <b>Inilah nasib akhir semua pemain judi online: MISKIN, RUNGKAD, DAN TIDAK PUNYA APA-APA LAGI!</b>
+            </div>
+
+            <button class="btn-action btn-spin" onclick="resetFullGame()" style="background: linear-gradient(180deg, #00ff66, #008822); color:#fff;">🔄 RESET SIMULASI & TOBAT</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var audioCtx = null;
+
+    function initAudio() {
+        if (!audioCtx) {
+            var AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playClickSound() {
+        if (!audioCtx) return;
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+    }
+
+    function playThunderSound() {
+        if (!audioCtx) return;
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+    }
+
+    function playTopupSound() {
+        if (!audioCtx) return;
+        var notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        notes.forEach(function(freq, idx) {
+            var osc = audioCtx.createOscillator();
+            var gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime + (idx * 0.05));
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime + (idx * 0.05));
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + (idx * 0.05) + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(audioCtx.currentTime + (idx * 0.05));
+            osc.stop(audioCtx.currentTime + (idx * 0.05) + 0.1);
+        });
+    }
+
+    function playTickSound() {
+        if (!audioCtx) return;
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.03);
+    }
+
+    function playStopSound() {
+        if (!audioCtx) return;
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+    }
+
+    var userItems = [
+        { id: 'tv', name: '📺 Smart TV 43 Inch', realPrice: 3500000, sellPrice: 200000, sold: false },
+        { id: 'bicycle', name: '🚲 Sepeda Gunung Lipat', realPrice: 2000000, sellPrice: 150000, sold: false },
+        { id: 'phone', name: '📱 HP Android Utama', realPrice: 4000000, sellPrice: 300000, sold: false },
+        { id: 'gold', name: '💍 Cincin Emas Kawin', realPrice: 5000000, sellPrice: 500000, sold: false },
+        { id: 'motor', name: '🛵 Motor Honda Beat', realPrice: 17000000, sellPrice: 1500000, sold: false },
+        { id: 'house', name: '🏠 Sertifikat Rumah Orang Tua', realPrice: 250000000, sellPrice: 10000000, sold: false }
+    ];
+
+    var balance = 100000;
+    var totalBet = 0;
+    var totalWin = 0;
+    var isSpinning = false;
+    var isAutoActive = false;
+    var autoSpinsLeft = 0;
+    var toastTimer = null;
+    var hasShownFirstRuinModal = false;
+    var pendingItemToSell = null;
+    var balanceHistory = [100000];
+
+    var symbols = ['⚡', '👑', '💎', '🔔', '🍇', '7️⃣'];
+
+    var appCard = document.getElementById('appCard');
+    var winBanner = document.getElementById('winBanner');
+    var toastNotif = document.getElementById('toastNotif');
+    var r1 = document.getElementById('r1');
+    var r2 = document.getElementById('r2');
+    var r3 = document.getElementById('r3');
+    
+    var btnSpin = document.getElementById('btnSpin');
+    var btnBuySpin = document.getElementById('btnBuySpin');
+    var btnAuto = document.getElementById('btnAuto');
+    var btnOpenModal = document.getElementById('btnOpenModal');
+    var btnCloseModal = document.getElementById('btnCloseModal');
+    var modalSettings = document.getElementById('modalSettings');
+
+    var btnOpenTopup = document.getElementById('btnOpenTopup');
+    var btnCloseTopup = document.getElementById('btnCloseTopup');
+    var modalTopup = document.getElementById('modalTopup');
+    var modalFirstRuin = document.getElementById('modalFirstRuin');
+    var modalTotalRuin = document.getElementById('modalTotalRuin');
+    var modalConfirmSell = document.getElementById('modalConfirmSell');
+    var modalQuitSuccess = document.getElementById('modalQuitSuccess');
+    var sellItemsContainer = document.getElementById('sellItemsContainer');
+
+    var confirmItemTitle = document.getElementById('confirmItemTitle');
+    var confirmItemRealPrice = document.getElementById('confirmItemRealPrice');
+    var confirmItemSellPrice = document.getElementById('confirmItemSellPrice');
+    var btnExecuteSell = document.getElementById('btnExecuteSell');
+
+    var rtpInput = document.getElementById('rtpInput');
+    var rtpText = document.getElementById('rtpText');
+    var accountTypeSelect = document.getElementById('accountTypeSelect');
+    var nearMissInput = document.getElementById('nearMissInput');
+    var fakeJackpotInput = document.getElementById('fakeJackpotInput');
+    var betInput = document.getElementById('betInput');
+
+    var valBalance = document.getElementById('valBalance');
+    var valProfit = document.getElementById('valProfit');
+    var valTotalBet = document.getElementById('valTotalBet');
+    var valActualRtp = document.getElementById('valActualRtp');
+    var accountStatusBadge = document.getElementById('accountStatusBadge');
+    var canvas = document.getElementById('balanceChart');
+    var ctx = canvas.getContext('2d');
+
+    btnOpenModal.onclick = function() {
+        initAudio(); playClickSound();
+        modalSettings.style.display = 'flex';
+    };
+    btnCloseModal.onclick = function() {
+        playClickSound();
+        modalSettings.style.display = 'none';
+        updateAccountBadge();
+    };
+
+    btnOpenTopup.onclick = function() {
+        initAudio(); playClickSound();
+        renderSellItems();
+        modalTopup.style.display = 'flex';
+    };
+    btnCloseTopup.onclick = function() {
+        playClickSound();
+        modalTopup.style.display = 'none';
+    };
+
+    rtpInput.oninput = function() { rtpText.innerText = rtpInput.value + '%'; };
+
+    function addBet(val) {
+        initAudio(); playClickSound();
+        var current = parseInt(betInput.value, 10) || 0;
+        betInput.value = current + val;
+    }
+
+    function showToast(message) {
+        if (toastTimer) clearTimeout(toastTimer);
+        toastNotif.innerText = message;
+        toastNotif.classList.add('show');
+        toastTimer = setTimeout(function() {
+            toastNotif.classList.remove('show');
+        }, 2500);
+    }
+
+    function renderSellItems() {
+        sellItemsContainer.innerHTML = '';
+        var allSold = true;
+
+        userItems.forEach(function(item) {
+            if (!item.sold) allSold = false;
+
+            var card = document.createElement('div');
+            card.className = 'sell-card';
+
+            var info = document.createElement('div');
+            info.className = 'sell-info';
+            info.innerHTML = '<div class="sell-name">' + item.name + '</div>' +
+                             '<div>Harga Asli: <span class="sell-real-price">' + formatRupiah(item.realPrice) + '</span></div>' +
+                             '<div>Dihargai Bandar: <span class="sell-price">' + formatRupiah(item.sellPrice) + '</span></div>';
+
+            var btn = document.createElement('button');
+            btn.className = 'btn-sell';
+            btn.innerText = item.sold ? 'LUNAS / HANGUS' : 'JUAL SEKARANG';
+            btn.disabled = item.sold;
+
+            btn.onclick = function() {
+                openConfirmSellModal(item.id);
+            };
+
+            card.appendChild(info);
+            card.appendChild(btn);
+            sellItemsContainer.appendChild(card);
+        });
+
+        return allSold;
+    }
+
+    function openConfirmSellModal(itemId) {
+        initAudio(); playClickSound();
+        var found = userItems.find(function(i) { return i.id === itemId; });
+        if (found && !found.sold) {
+            pendingItemToSell = found;
+            confirmItemTitle.innerText = found.name;
+            confirmItemRealPrice.innerText = formatRupiah(found.realPrice);
+            confirmItemSellPrice.innerText = formatRupiah(found.sellPrice);
+            
+            modalTopup.style.display = 'none';
+            modalConfirmSell.style.display = 'flex';
+        }
+    }
+
+    function cancelSellItem() {
+        playClickSound();
+        pendingItemToSell = null;
+        modalConfirmSell.style.display = 'none';
+        modalTopup.style.display = 'flex';
+    }
+
+    btnExecuteSell.onclick = function() {
+        initAudio(); playClickSound();
+        if (pendingItemToSell && !pendingItemToSell.sold) {
+            pendingItemToSell.sold = true;
+            balance += pendingItemToSell.sellPrice;
+            playTopupSound();
+            updateDisplay();
+            renderSellItems();
+            
+            showToast('💸 ' + pendingItemToSell.name + ' TERJUAL MURAH! SALDO +' + formatRupiah(pendingItemToSell.sellPrice));
+            
+            pendingItemToSell = null;
+            modalConfirmSell.style.display = 'none';
+            modalTopup.style.display = 'flex';
+        }
+    };
+
+    function closeRuinModalAndOpenSell() {
+        playClickSound();
+        modalFirstRuin.style.display = 'none';
+        renderSellItems();
+        modalTopup.style.display = 'flex';
+    }
+
+    function quitGameAlert() {
+        playClickSound();
+        modalFirstRuin.style.display = 'none';
+        modalQuitSuccess.style.display = 'flex';
+    }
+
+    // Fungsi Langsung Mengeluarkan User / Menutup Web
+    function closeQuitSuccessModal() {
+        playClickSound();
+        modalQuitSuccess.style.display = 'none';
+        
+        // Coba tutup tab
+        window.close();
+        
+        // Fallback jika window.close() diblokir browser: Redirect ke situs edukasi Kominfo
+        setTimeout(function() {
+            window.location.href = "https://www.kominfo.go.id";
+        }, 100);
+    }
+
+    function resetFullGame() {
+        playClickSound();
+        balance = 100000;
+        totalBet = 0;
+        totalWin = 0;
+        hasShownFirstRuinModal = false;
+        pendingItemToSell = null;
+        balanceHistory = [100000];
+        userItems.forEach(function(i) { i.sold = false; });
+        
+        btnOpenTopup.style.display = 'none';
+        
+        modalTotalRuin.style.display = 'none';
+        updateDisplay();
+        showToast('🔄 SIMULASI DIRESET. SALDO AWAL Rp 100.000 KEMBALI!');
+    }
+
+    function updateAccountBadge() {
+        var type = accountTypeSelect.value;
+        if (type === 'new') {
+            accountStatusBadge.innerText = "VIP AKUN BARU (GACOR)";
+            accountStatusBadge.style.background = "#00ff66";
+            accountStatusBadge.style.color = "#000";
+        } else if (type === 'rungkad') {
+            accountStatusBadge.innerText = "AKUN SEDOT / RUNGKAD";
+            accountStatusBadge.style.background = "#ff0055";
+            accountStatusBadge.style.color = "#fff";
+        } else {
+            accountStatusBadge.innerText = "AKUN REGULER";
+            accountStatusBadge.style.background = "#ffbb00";
+            accountStatusBadge.style.color = "#000";
+        }
+    }
+
+    function formatRupiah(num) {
+        return 'Rp ' + Math.floor(num).toLocaleString('id-ID');
+    }
+
+    function getResult(bet, isBuySpin) {
+        var effectiveRTP = parseInt(rtpInput.value, 10);
+        var accType = accountTypeSelect.value;
+
+        if (accType === 'new') effectiveRTP = 90;
+        else if (accType === 'rungkad') effectiveRTP = 10;
+
+        if (isBuySpin) {
+            effectiveRTP = Math.min(effectiveRTP, 40); 
+        }
+
+        var winChance = effectiveRTP / 200;
+        var isWin = Math.random() < winChance;
+
+        if (isWin) {
+            var sym = symbols[Math.floor(Math.random() * symbols.length)];
+            var payoutMultiplier = (effectiveRTP / 100) / winChance;
+            var payout = Math.round(bet * payoutMultiplier);
+            return { reels: [sym, sym, sym], payout: payout };
+        } else {
+            var s1 = symbols[Math.floor(Math.random() * symbols.length)];
+            var s2 = symbols[Math.floor(Math.random() * symbols.length)];
+            var s3 = symbols[Math.floor(Math.random() * symbols.length)];
+
+            if (nearMissInput.checked && Math.random() < 0.6) {
+                s2 = s1;
+                while (s3 === s1) {
+                    s3 = symbols[Math.floor(Math.random() * symbols.length)];
+                }
+            } else {
+                while (s1 === s2 && s2 === s3) {
+                    s3 = symbols[Math.floor(Math.random() * symbols.length)];
+                }
+            }
+            return { reels: [s1, s2, s3], payout: 0 };
+        }
+    }
+
+    function drawChart() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (balanceHistory.length < 2) return;
+
+        var maxVal = Math.max.apply(null, balanceHistory);
+        var minVal = Math.min.apply(null, balanceHistory);
+        if (maxVal === minVal) maxVal += 1000;
+
+        ctx.beginPath();
+        ctx.strokeStyle = '#00ff66';
+        ctx.lineWidth = 2.5;
+
+        for (var i = 0; i < balanceHistory.length; i++) {
+            var x = (i / (balanceHistory.length - 1)) * canvas.width;
+            var normalized = (balanceHistory[i] - minVal) / (maxVal - minVal);
+            var y = canvas.height - (normalized * (canvas.height - 16) + 8);
+
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+
+    function updateDisplay() {
+        var houseProfit = totalBet - totalWin;
+        var actualRTP = totalBet > 0 ? ((totalWin / totalBet) * 100).toFixed(1) : 0;
+
+        valBalance.innerText = formatRupiah(balance);
+        valProfit.innerText = formatRupiah(houseProfit);
+        valTotalBet.innerText = formatRupiah(totalBet);
+        valActualRtp.innerText = actualRTP + '%';
+
+        if (houseProfit >= 0) {
+            valProfit.className = "stat-val-compact text-red";
+        } else {
+            valProfit.className = "stat-val-compact text-green";
+        }
+
+        balanceHistory.push(balance);
+        if (balanceHistory.length > 50) balanceHistory.shift();
+        drawChart();
+    }
+
+    function checkBankruptcyCondition() {
+        var allItemsSold = userItems.every(function(item) { return item.sold; });
+
+        if (balance <= 0) {
+            btnOpenTopup.style.display = 'block';
+
+            if (!hasShownFirstRuinModal) {
+                hasShownFirstRuinModal = true;
+                modalFirstRuin.style.display = 'flex';
+            } else if (allItemsSold) {
+                modalTotalRuin.style.display = 'flex';
+            } else {
+                renderSellItems();
+                modalTopup.style.display = 'flex';
+            }
+        }
+    }
+
+    function executeSpin(isBuySpin, onComplete) {
+        var bet = parseInt(betInput.value, 10);
+        if (isNaN(bet) || bet <= 0) bet = 1000;
+
+        var actualCost = isBuySpin ? (bet * 100) : bet;
+
+        if (balance < actualCost) {
+            stopAuto();
+            checkBankruptcyCondition();
+            if (onComplete) onComplete(false);
+            return;
+        }
+
+        if (isSpinning) return;
+        isSpinning = true;
+
+        balance -= actualCost;
+        totalBet += actualCost;
+
+        var outcome = getResult(bet, isBuySpin);
+
+        btnSpin.disabled = true;
+        btnBuySpin.disabled = true;
+
+        var r1Rolling = true, r2Rolling = true, r3Rolling = true;
+
+        r1.className = "reel-box blur-effect";
+        r2.className = "reel-box blur-effect";
+        r3.className = "reel-box blur-effect";
+
+        var t1 = setInterval(function() {
+            if (r1Rolling) { r1.innerText = symbols[Math.floor(Math.random() * symbols.length)]; playTickSound(); }
+        }, 100);
+
+        var t2 = setInterval(function() {
+            if (r2Rolling) r2.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        }, 100);
+
+        var t3 = setInterval(function() {
+            if (r3Rolling) r3.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        }, 100);
+
+        setTimeout(function() {
+            r1Rolling = false; clearInterval(t1);
+            r1.innerText = outcome.reels[0]; r1.className = "reel-box";
+            playStopSound();
+        }, 600);
+
+        setTimeout(function() {
+            r2Rolling = false; clearInterval(t2);
+            r2.innerText = outcome.reels[1]; r2.className = "reel-box";
+            playStopSound();
+        }, 1200);
+
+        setTimeout(function() {
+            r3Rolling = false; clearInterval(t3);
+            r3.innerText = outcome.reels[2]; r3.className = "reel-box";
+            playStopSound();
+
+            balance += outcome.payout;
+            totalWin += outcome.payout;
+
+            if (outcome.payout > 0 && fakeJackpotInput.checked) {
+                setTimeout(playThunderSound, 100);
+                appCard.classList.add('jackpot-flash');
+                winBanner.classList.add('show');
+                
+                setTimeout(function() {
+                    appCard.classList.remove('jackpot-flash');
+                    winBanner.classList.remove('show');
+                }, 1200);
+            }
+
+            updateDisplay();
+
+            isSpinning = false;
+            if (!isAutoActive) {
+                btnSpin.disabled = false;
+                btnBuySpin.disabled = false;
+            }
+
+            checkBankruptcyCondition();
+
+            if (onComplete) onComplete(true);
+        }, 1900);
+    }
+
+    function runNextAutoSpin() {
+        if (!isAutoActive || autoSpinsLeft <= 0) {
+            stopAuto();
+            return;
+        }
+
+        btnAuto.innerText = "STOP TURBO (" + autoSpinsLeft + ")";
+
+        executeSpin(false, function(success) {
+            if (success && isAutoActive) {
+                autoSpinsLeft--;
+                if (autoSpinsLeft > 0) {
+                    setTimeout(runNextAutoSpin, 500);
+                } else {
+                    stopAuto();
+                }
+            } else {
+                stopAuto();
+            }
+        });
+    }
+
+    function stopAuto() {
+        isAutoActive = false;
+        autoSpinsLeft = 0;
+        btnAuto.innerText = "⚡ AUTO TURBO (100X)";
+        if (!isSpinning) {
+            btnSpin.disabled = false;
+            btnBuySpin.disabled = false;
+        }
+    }
+
+    btnSpin.addEventListener('click', function(e) {
+        e.preventDefault(); initAudio(); playClickSound();
+        executeSpin(false);
+    });
+
+    btnBuySpin.addEventListener('click', function(e) {
+        e.preventDefault(); initAudio(); playClickSound();
+        executeSpin(true);
+    });
+
+    btnAuto.addEventListener('click', function(e) {
+        e.preventDefault(); initAudio(); playClickSound();
+        if (isAutoActive) {
+            stopAuto();
+        } else {
+            isAutoActive = true;
+            autoSpinsLeft = 100;
+            runNextAutoSpin();
+        }
+    });
+
+    updateDisplay();
+    updateAccountBadge();
+</script>
+
+</body>
+</html>
